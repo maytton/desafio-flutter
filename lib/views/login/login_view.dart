@@ -3,8 +3,9 @@ import 'package:desafio_flutter/views/login/widgets/button_login.dart';
 import 'package:desafio_flutter/views/login/widgets/forgot_password.dart';
 import 'package:desafio_flutter/views/login/widgets/header.dart';
 import 'package:desafio_flutter/views/login/widgets/login_input_field.dart';
+import 'package:desafio_flutter/views/login/widgets/login_tabs.dart';
+import 'package:desafio_flutter/views/login/widgets/social_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -21,6 +22,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+
     final viewModel = Provider.of<LoginViewModel>(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -83,32 +85,9 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         child: Column(
                           children: [
-                            Row(
-                              children: [
-                                TextButton(
-                                  child: Text(
-                                    'Entrar',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                ),
-                                const SizedBox(width: 20),
-                                TextButton(
-                                  child: Text(
-                                    'Cadastrar',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ],
+                            LoginTabs(
+                              onLoginTap: (){},
+                              onRegisterTap: (){},
                             ),
                             const SizedBox(height: 20),
                             Form(
@@ -119,8 +98,7 @@ class _LoginViewState extends State<LoginView> {
                                     hintText: 'CPF',
                                     onChanged: viewModel.setCpf,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty)
-                                        return 'Informe o CPF';
+                                      if (value == null || value.isEmpty) return 'Informe o CPF';
                                       return null;
                                     },
                                   ),
@@ -147,7 +125,6 @@ class _LoginViewState extends State<LoginView> {
                               },
                               onTap: () {},
                             ),
-
                             SizedBox(height: isSmallHeight ? 16 : 32),
                           ],
                         ),
@@ -185,39 +162,8 @@ class _LoginViewState extends State<LoginView> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      const Text(
-                        'Acesse através das redes sociais',
-                        style: TextStyle(color: Colors.white),
-                      ),
                       const SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.google,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {},
-                          ),
-                          SizedBox(width: 16),
-                          IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.facebook,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {},
-                          ),
-                          SizedBox(width: 16),
-                          IconButton(
-                            icon: FaIcon(
-                              FontAwesomeIcons.twitter,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
+                      SocialButtons(),
                     ],
                   ),
                 ],

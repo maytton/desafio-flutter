@@ -1,10 +1,22 @@
 import 'package:desafio_flutter/providers/providers.dart';
 import 'package:desafio_flutter/routes/go_router.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MultiProvider(providers: providers, child: const MyApp()));
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+      MultiProvider(
+          providers: providers,
+          child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

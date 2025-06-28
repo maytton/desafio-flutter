@@ -1,4 +1,7 @@
 import 'package:desafio_flutter/viewmodels/login_view_model.dart';
+import 'package:desafio_flutter/views/login/widgets/button_login.dart';
+import 'package:desafio_flutter/views/login/widgets/forgot_password.dart';
+import 'package:desafio_flutter/views/login/widgets/header.dart';
 import 'package:desafio_flutter/views/login/widgets/login_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,14 +14,10 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-
-
-final _formKey = GlobalKey<FormState>();
-
-
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool checked = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,44 +59,7 @@ class _LoginViewState extends State<LoginView> {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final isSmallScreen = constraints.maxWidth < 600;
-                      return Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment:
-                          isSmallScreen
-                              ? CrossAxisAlignment.start
-                              : CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/tokiologo.png',
-                              width: 200,
-                              height: 200,
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              'Bem vindo!',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign:
-                              isSmallScreen
-                                  ? TextAlign.start
-                                  : TextAlign.center,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Aqui você gerencia seus seguros e de seus familiares \n em poucos cliques!',
-                              style: TextStyle(color: Colors.white),
-                              textAlign:
-                              isSmallScreen
-                                  ? TextAlign.start
-                                  : TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      );
+                      return Header(isSmallScreen: isSmallScreen);
                     },
                   ),
                   SizedBox(height: isSmallHeight ? 16 : 32),
@@ -157,7 +119,8 @@ class _LoginViewState extends State<LoginView> {
                                     hintText: 'CPF',
                                     onChanged: viewModel.setCpf,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) return 'Informe o CPF';
+                                      if (value == null || value.isEmpty)
+                                        return 'Informe o CPF';
                                       return null;
                                     },
                                   ),
@@ -166,113 +129,47 @@ class _LoginViewState extends State<LoginView> {
                                     hintText: 'Senha',
                                     onChanged: viewModel.setPassword,
                                     isPassword: true,
-                                    validator: (value) =>
-                                    value != null && value.length < 6
-                                        ? 'Senha mínima de 6 caracteres'
-                                        : null,
+                                    validator:
+                                        (value) =>
+                                            value != null && value.length < 6
+                                                ? 'Senha mínima de 6 caracteres'
+                                                : null,
                                   ),
                                 ],
                               ),
+                            ),
+                            RemeberPassword(
+                              isChecked: checked,
+                              onChange: (value) {
+                                setState(() {
+                                  checked = value!;
+                                });
+                              },
+                              onTap: () {},
                             ),
 
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Wrap(
-                                alignment: WrapAlignment.spaceBetween,
-                                runSpacing: 8,
-                                spacing: 8,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Checkbox(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                        ),
-                                        value: checked,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checked = value!;
-                                          });
-                                        },
-                                        checkColor: Colors.white,
-                                        activeColor: Color(0xFF00C78C),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Lembrar senha',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Esqueceu a senha?',
-                                      style: TextStyle(
-                                        color: Color(0xFF00C78C),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(height: isSmallHeight ? 16 : 32),
                           ],
                         ),
                       ),
-                      Positioned(
-                        bottom: -30,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()){
-                                final result = await viewModel.login();
-                                if (result){
-                                  // proxima tela
-                                }else{
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Erro ao fazer login')),
-                                  );
-                                }
+                      ButtonLogin(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()){
+                              setState(() => isLoading = true);
+                              final result = await viewModel.login();
+                              setState(() => isLoading = false);
+
+                              if (result){
+                                // chama outra tela
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Erro ao fazer login')),
+                                );
                               }
-                            },
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFF00C78C),
-                                    Color(0xFFE6F441),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
-                                    offset: Offset(0, 4),
-                                    blurRadius: 8,
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                            }
+                          },
+                          isLoading: isLoading,
+                      )
                     ],
                   ),
                   SizedBox(height: isSmallHeight ? 16 : 32),

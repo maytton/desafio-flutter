@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart' show AuthService;
+import '../viewmodels/home_view_model.dart';
+import '../views/home/home_view.dart';
 
 
 final GoRouter router = GoRouter(
@@ -17,6 +19,14 @@ final GoRouter router = GoRouter(
           create: (_) => LoginViewModel(authService: AuthService()),
           child: const LoginView(),
         ),
+      ),
+      GoRoute(
+        path: '/home',
+        name: RouteNames.home,
+        builder: (context, state) => ChangeNotifierProvider(
+          create: (_) => HomeViewModel(),
+          child: const HomeView(),
+        )
       ),
     ],
 );

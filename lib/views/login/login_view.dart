@@ -6,6 +6,7 @@ import 'package:desafio_flutter/views/login/widgets/login_input_field.dart';
 import 'package:desafio_flutter/views/login/widgets/login_tabs.dart';
 import 'package:desafio_flutter/views/login/widgets/social_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -131,19 +132,20 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       ButtonLogin(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()){
-                              setState(() => isLoading = true);
-                              final result = await viewModel.login();
-                              setState(() => isLoading = false);
-
-                              if (result){
-                                // chama outra tela
-                              }else{
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Erro ao fazer login')),
-                                );
-                              }
-                            }
+                            context.go('/home');
+                            // if (_formKey.currentState!.validate()){
+                            //   setState(() => isLoading = true);
+                            //   final result = await viewModel.login();
+                            //   setState(() => isLoading = false);
+                            //
+                            //   if (result){
+                            //     // chama outra tela
+                            //   }else{
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //       const SnackBar(content: Text('Erro ao fazer login')),
+                            //     );
+                            //   }
+                            // }
                           },
                           isLoading: isLoading,
                       )

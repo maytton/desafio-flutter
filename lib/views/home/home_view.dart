@@ -1,35 +1,30 @@
 import 'package:desafio_flutter/views/home/widgets/add_card_button.dart';
 import 'package:desafio_flutter/views/home/widgets/home_header.dart';
 import 'package:desafio_flutter/views/home/widgets/menu_button.dart';
+import 'package:desafio_flutter/views/shared/app_bar.dart';
+import 'package:desafio_flutter/views/shared/drawer.dart';
 import 'package:flutter/material.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu, color: Colors.white),
-        ),
-        title: Center(
-          child: Image(
-            image: AssetImage('assets/images/tokiologo.png'),
-            color: Colors.white,
-            width: 150,
-            height: 150,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications, color: Colors.white),
-          ),
-        ],
+      key: scaffoldKey,
+      appBar: AppBarCustom(
+        onMenuTap: () {
+          scaffoldKey.currentState?.openDrawer();
+        },
       ),
+      drawer: DrawerCustom(),
       body: Column(
         children: [
           HomeHeader(),
@@ -40,8 +35,8 @@ class HomeView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return Align (
-                        alignment: Alignment.topLeft,
+                    return Align(
+                      alignment: Alignment.topLeft,
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 700),
                         child: Padding(

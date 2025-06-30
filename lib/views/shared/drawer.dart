@@ -1,6 +1,8 @@
+import 'package:desafio_flutter/services/auth_service.dart';
 import 'package:desafio_flutter/views/shared/drawer_item.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class DrawerCustom extends StatelessWidget {
   const DrawerCustom({super.key});
@@ -46,6 +48,16 @@ class DrawerCustom extends StatelessWidget {
           DrawerItem(icon: FontAwesomeIcons.phoneVolume, title: 'Telefones Importantes'),
           const Divider(),
           DrawerItem(icon: FontAwesomeIcons.gear, title: 'Configurações'),
+          DrawerItem(
+            icon: FontAwesomeIcons.rightFromBracket,
+            title: 'Sair',
+            onTap: () async {
+              await AuthService().logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
+          ),
         ],
       ),
     );

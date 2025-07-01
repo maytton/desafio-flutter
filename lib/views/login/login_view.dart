@@ -20,6 +20,8 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool checked = true;
   bool isLoading = false;
+  bool isLogin = true;
+  bool obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +89,25 @@ class _LoginViewState extends State<LoginView> {
                         child: Column(
                           children: [
                             LoginTabs(
-                              onLoginTap: (){},
-                              onRegisterTap: (){},
+                              isLoginSelected: isLogin,
+                              onLoginTap: () => setState(() => isLogin = true),
+                              onRegisterTap: () => setState(() => isLogin = false),
                             ),
                             const SizedBox(height: 20),
                             Form(
                               key: _formKey,
                               child: Column(
                                 children: [
+                                  if (!isLogin)
+                                    LoginInputField(
+                                      hintText: 'Nome',
+                                      onChanged: viewModel.setNome,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) return 'Informe seu nome';
+                                        return null;
+                                      },
+                                    ),
+                                  const SizedBox(height: 20),
                                   LoginInputField(
                                     hintText: 'CPF',
                                     onChanged: viewModel.setCpf,
@@ -108,11 +121,22 @@ class _LoginViewState extends State<LoginView> {
                                     hintText: 'Senha',
                                     onChanged: viewModel.setPassword,
                                     isPassword: true,
-                                    validator:
-                                        (value) =>
-                                            value != null && value.length < 6
-                                                ? 'Senha mínima de 6 caracteres'
-                                                : null,
+                                    validator: (value) =>
+                                    value != null && value.length < 6
+                                        ? 'Senha mínima de 6 caracteres'
+                                        : null,
+                                    obscureText: obscurePassword,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                        color: Colors.white54,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          obscurePassword = !obscurePassword;
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -132,20 +156,24 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       ButtonLogin(
                           onPressed: () async {
-                            context.go('/home');
-                            // if (_formKey.currentState!.validate()){
-                            //   setState(() => isLoading = true);
-                            //   final result = await viewModel.login();
-                            //   setState(() => isLoading = false);
-                            //
-                            //   if (result){
-                            //     // chama outra tela
-                            //   }else{
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       const SnackBar(content: Text('Erro ao fazer login')),
-                            //     );
-                            //   }
-                            // }
+                            if (_formKey.currentState!.validate()){
+                              setState(() => isLoading = true);
+
+                              final result = isLogin
+                                  ? await viewModel.login()
+                                  : await viewModel.register();
+
+                              setState(() => isLoading = false);
+
+                              if (result) {
+                                context.go('/home');
+                              } else {
+                                final msg = isLogin ? 'Erro ao fazer login' : 'Erro ao cadastrar';
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(msg)),
+                                );
+                              }
+                            }
                           },
                           isLoading: isLoading,
                       )

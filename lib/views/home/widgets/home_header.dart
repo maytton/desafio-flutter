@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final String nome;
+  const HomeHeader({super.key, required this.nome});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +27,11 @@ class HomeHeader extends StatelessWidget {
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text('Bem Vindo!', style: TextStyle(color: Colors.white)),
                 Text(
-                  'Maytton',
-                  style: TextStyle(
+                  nome,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

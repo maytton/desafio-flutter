@@ -6,12 +6,16 @@ class LoginInputField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final bool obscureText;
+  final Widget? suffixIcon;
 
   const LoginInputField({
     super.key,
     required this.hintText,
     this.controller,
     this.isPassword = false,
+    this.obscureText = false,
+    this.suffixIcon,
     this.validator,
     this.onChanged,
   });
@@ -20,12 +24,13 @@ class LoginInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      obscureText: isPassword,
+      obscureText: isPassword ? obscureText : false,
       style: const TextStyle(color: Colors.white),
       textAlign: TextAlign.center,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.white54),
+        suffixIcon: isPassword ? suffixIcon : null,
         filled: true,
         fillColor: Colors.grey[900],
         border: OutlineInputBorder(

@@ -5,7 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class DrawerCustom extends StatelessWidget {
-  const DrawerCustom({super.key});
+  final String nome;
+  const DrawerCustom({super.key, required this.nome});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class DrawerCustom extends StatelessWidget {
                 SizedBox(width: 15),
                 Expanded(
                   child: Text(
-                    'Olá, Usuário',
+                    'Olá, $nome',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

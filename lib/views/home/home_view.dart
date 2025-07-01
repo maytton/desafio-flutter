@@ -1,9 +1,11 @@
+import 'package:desafio_flutter/viewmodels/home_view_model.dart';
 import 'package:desafio_flutter/views/home/widgets/add_card_button.dart';
 import 'package:desafio_flutter/views/home/widgets/home_header.dart';
 import 'package:desafio_flutter/views/home/widgets/menu_button.dart';
 import 'package:desafio_flutter/views/shared/app_bar.dart';
 import 'package:desafio_flutter/views/shared/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -17,6 +19,7 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    final nome = context.watch<HomeViewModel>().nomeUsuario ?? 'Usuário';
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBarCustom(
@@ -24,10 +27,10 @@ class _HomeViewState extends State<HomeView> {
           scaffoldKey.currentState?.openDrawer();
         },
       ),
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(nome: nome),
       body: Column(
         children: [
-          HomeHeader(),
+          HomeHeader(nome: nome),
           Expanded(
             child: Container(
               width: double.infinity,

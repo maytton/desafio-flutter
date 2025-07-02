@@ -14,6 +14,11 @@ Aplicativo Flutter desenvolvido como parte do desafio técnico. Possui autentica
 - [x] Gerenciamento de estado com `Provider`
 - [x] **Compatível com Android e Web (Flutter Web) ✅**
 
+## 🌐 Versão Online
+
+Acesse a aplicação online:  
+🔗 [https://desafio-flutter-cab0d.web.app](https://desafio-flutter-cab0d.web.app)
+
 ---
 
 ## ⚙️ Requisitos

@@ -5,6 +5,7 @@ import 'package:desafio_flutter/views/home/widgets/menu_button.dart';
 import 'package:desafio_flutter/views/shared/app_bar.dart';
 import 'package:desafio_flutter/views/shared/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -61,7 +62,11 @@ class _HomeViewState extends State<HomeView> {
                                 MenuButton(
                                   icon: Icons.directions_car,
                                   label: 'Automóvel',
-                                  onTap: () {},
+                                  onTap: () {
+                                    context.push(
+                                      '/webview?url=https://jsonplaceholder.typicode.com/',
+                                    );
+                                  },
                                 ),
                                 MenuButton(
                                   icon: Icons.home,

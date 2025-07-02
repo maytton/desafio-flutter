@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = "27.0.12077973"
     namespace = "com.example.desafio_flutter"
 
